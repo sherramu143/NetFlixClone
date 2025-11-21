@@ -4,48 +4,62 @@ import backarrow from "../../assets/back_arrow_icon.png";
 import { useNavigate, useParams } from "react-router-dom";
 
 const Player = () => {
-    const[apiData,setApiData]=useState({
-        name:"",
-        key:"",
-        published_at:"",
-        typeof:""
-    });
-const {id}=useParams();
-const navigate=useNavigate()
-const url = `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`;
-const options = {
-  method: 'GET',
-  headers: {
-    accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjOTU5ZTU5YWVmMDIxMmIyMTRkOWM2NDFiNjI0MDZlOCIsIm5iZiI6MTc2MzczNzcxNy43MjQsInN1YiI6IjY5MjA4MDc1OWQ3OWE1ZThkNzRhMmZkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Vs3yfQE9kCEWRa_8oxYcxapwGzAHv3CKYDknQeJG6aU'
-  }
-};
+  const [video, setVideo] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    useEffect(()=>{
-fetch(url, options)
-  .then(res => res.json())
-  .then(response => setApiData(response.results[0]))
-  .catch(err => console.error(err))
-},[])
+  useEffect(() => {
+    const fetchVideo = async () => {
+      const url = `https://api.themoviedb.org/3/movie/${id}/videos?language=en-US`;
+      const options = {
+        method: "GET",
+        headers: {
+          accept: 'application/json',
+    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjOTU5ZTU5YWVmMDIxMmIyMTRkOWM2NDFiNjI0MDZlOCIsIm5iZiI6MTc2MzczNzcxNy43MjQsInN1YiI6IjY5MjA4MDc1OWQ3OWE1ZThkNzRhMmZkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Vs3yfQE9kCEWRa_8oxYcxapwGzAHv3CKYDknQeJG6aU'
+  // <-- replace with your real TMDB API key
+        },
+      };
+
+      try {
+        const res = await fetch(url, options);
+        const data = await res.json();
+        setVideo(data.results?.[0] || null);
+      } catch (err) {
+        console.error("Error fetching video:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideo();
+  }, [id]);
+
+  if (loading) return <div>Loading video...</div>;
+  if (!video) return <div>No video found.</div>;
 
   return (
     <div className="player">
-      <img src={backarrow} alt="back" className="back-btn"  onClick={()=>{navigate("/");
-}}/>
+      <img
+        src={backarrow}
+        alt="back"
+        className="back-btn"
+        onClick={() => navigate("/")}
+      />
 
       <iframe
         width="90%"
         height="90%"
-        src={`https://www.youtube.com/embed/${apiData.key}`}
+        src={video.key ? `https://www.youtube.com/embed/${video.key}` : ""}
         title="trailer"
         frameBorder="0"
         allowFullScreen
-      ></iframe>
+      />
 
       <div className="player-info">
-        <p>{apiData.published_at.slice(0,10)}</p>
-        <p>{apiData.name}</p>
-        <p>{apiData.typeof}</p>
+        <p>{video.published_at ? video.published_at.slice(0, 10) : "N/A"}</p>
+        <p>{video.name || video.title || "N/A"}</p>
+        <p>{video.type || "N/A"}</p>
       </div>
     </div>
   );

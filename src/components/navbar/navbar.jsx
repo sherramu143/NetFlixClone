@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import '../navbar/navbar.css'
 import logo from '../../assets/logo.png';
 import searcIcon from '../../assets/search_icon.svg'

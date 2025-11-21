@@ -1,23 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import Home from "./pages/Home/Home";
+import Login from "./pages/Login/login";
+import { Routes, Route, useNavigate } from "react-router-dom";
+import Player from "./pages/Player/Player";
+import { auth } from "./firebase";
+import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { ToastContainer } from "react-toastify";
 
 function App() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        console.log("logged in");
+        navigate("/");
+      } else {
+        console.log("logout");
+        navigate("/login");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <ToastContainer theme="dark" />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/player/:id" element={<Player />} />
+      </Routes>
     </div>
   );
 }

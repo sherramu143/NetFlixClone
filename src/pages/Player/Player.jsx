@@ -16,7 +16,7 @@ const Player = () => {
         method: "GET",
         headers: {
           accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjOTU5ZTU5YWVmMDIxMmIyMTRkOWM2NDFiNjI0MDZlOCIsIm5iZiI6MTc2MzczNzcxNy43MjQsInN1YiI6IjY5MjA4MDc1OWQ3OWE1ZThkNzRhMmZkYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.Vs3yfQE9kCEWRa_8oxYcxapwGzAHv3CKYDknQeJG6aU'
+    Authorization: `Bearer ${process.env.REACT_APP_TMDB_BEARER_KEY}`,
   // <-- replace with your real TMDB API key
         },
       };

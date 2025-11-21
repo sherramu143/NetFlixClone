@@ -8,10 +8,6 @@ import {
 } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { toast } from "react-toastify";
-console.log("API Key:", process.env.REACT_APP_FIREBASE_API_KEY);
-console.log("Project ID:", process.env.REACT_APP_FIREBASE_PROJECT_ID);
-
-console.log("Project ID:", process.env.REACT_APP_FIREBASE_PROJECT_ID);
 
 // ------------------- USE ENV VARIABLES -------------------
 const firebaseConfig = {
